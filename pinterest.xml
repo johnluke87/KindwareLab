@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Guide utili per casa, spesa e auto | Kindware Lab</title>
+  <link>https://kindwarelab.it/guide/</link>
+  <description>Guide gratuite di Kindware Lab: come riconoscere app gratuite senza pubblicità, organizzare spesa e costi di famiglia e aggiungere un'app web alla schermata Home.</description>
+  <language>it-it</language>
+  <lastBuildDate>Wed, 11 Nov 2026 14:34:07 GMT</lastBuildDate>
+  <atom:link href="https://kindwarelab.it/pinterest.xml" rel="self" type="application/rss+xml"/>
+  <image><url>https://kindwarelab.it/logo.png</url><title>Guide utili per casa, spesa e auto | Kindware Lab</title><link>https://kindwarelab.it/guide/</link></image>
+  <item>
+    <title>App gratuite utili e senza pubblicità: come riconoscerle (e quali usare per casa, auto e montagna)</title>
+    <link>https://kindwarelab.it/guide/app-gratuite-senza-pubblicita/</link>
+    <guid isPermaLink="true">https://kindwarelab.it/guide/app-gratuite-senza-pubblicita/</guid>
+    <pubDate>Tue, 10 Nov 2026 08:00:00 GMT</pubDate>
+    <description>Come riconoscere un'app davvero gratuita e senza pubblicità: come si mantengono le app gratis, cosa controllare su privacy, permessi e dati, e tre app utili per spesa, auto e montagna.</description>
+    <enclosure url="https://kindwarelab.it/guide/img/app-gratuite-senza-pubblicita-pin.jpg" length="112213" type="image/jpeg"/>
+    <media:content url="https://kindwarelab.it/guide/img/app-gratuite-senza-pubblicita-pin.jpg" medium="image" type="image/jpeg" width="1000" height="1500"/>
+  </item>
+  <item>
+    <title>Come organizzare spesa e costi di famiglia: un metodo semplice in 4 passi</title>
+    <link>https://kindwarelab.it/guide/organizzare-spesa-e-costi-di-famiglia/</link>
+    <guid isPermaLink="true">https://kindwarelab.it/guide/organizzare-spesa-e-costi-di-famiglia/</guid>
+    <pubDate>Tue, 10 Nov 2026 08:07:00 GMT</pubDate>
+    <description>Un metodo semplice per organizzare spesa e costi di famiglia: capire dove vanno i soldi, categorie, budget, strumenti condivisi e una revisione mensile di 15 minuti.</description>
+    <enclosure url="https://kindwarelab.it/guide/img/organizzare-spesa-e-costi-di-famiglia-pin.jpg" length="107827" type="image/jpeg"/>
+    <media:content url="https://kindwarelab.it/guide/img/organizzare-spesa-e-costi-di-famiglia-pin.jpg" medium="image" type="image/jpeg" width="1000" height="1500"/>
+  </item>
+  <item>
+    <title>Come aggiungere un'app web alla schermata Home, su Android e iPhone</title>
+    <link>https://kindwarelab.it/guide/aggiungere-app-alla-schermata-home/</link>
+    <guid isPermaLink="true">https://kindwarelab.it/guide/aggiungere-app-alla-schermata-home/</guid>
+    <pubDate>Tue, 10 Nov 2026 08:14:00 GMT</pubDate>
+    <description>Come aggiungere un sito o un'app web alla schermata Home di Android (Chrome) e iPhone (Safari), cosa sono le app web e perché sono comode. Passi semplici e verificabili.</description>
+    <enclosure url="https://kindwarelab.it/guide/img/aggiungere-app-alla-schermata-home-pin.jpg" length="101669" type="image/jpeg"/>
+    <media:content url="https://kindwarelab.it/guide/img/aggiungere-app-alla-schermata-home-pin.jpg" medium="image" type="image/jpeg" width="1000" height="1500"/>
+  </item>
+</channel>
+</rss>

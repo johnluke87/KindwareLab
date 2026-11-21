@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kindware Lab · le app che ti mancavano</title>
+<link rel="canonical" href="https://kindwarelab.it/">
+<meta name="description" content="Kindware Lab regala app utili per le cose di tutti i giorni: SpesaFox per la spesa, SpeseAuto per i costi dell'auto, Gippix per rivedere i tuoi giri in volo 3D e Comunipedia, l'atlante dei Comuni italiani. Gratis e senza pubblicità.">
+<meta property="og:title" content="Kindware Lab · app gratuite e gentili">
+<meta property="og:description" content="SpesaFox, SpeseAuto, Gippix e Comunipedia: app e siti gratis, senza pubblicità, fatte per semplificare la vita.">
+<meta property="og:image" content="https://www.gianlucadario.com/apps/kindwarelab/logo.png">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1c2e7a">
+<meta name="p:domain_verify" content="f255345c5e1a99211195d1ba2bc01d1d"/>
+<link rel="icon" href="icona.png">
+<link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Bricolage";src:url(fonts/bricolage.woff2) format("woff2");font-weight:200 800;font-display:swap}
+@font-face{font-family:"Atkinson";src:url(fonts/atkinson-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Atkinson";src:url(fonts/atkinson-700.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{
+  --ink:#1c2e7a; --ink-deep:#101a52; --gold:#ffb347; --paper:#f3f1ff; --white:#fff;
+  --fox:#1e5b3a; --fox-2:#ee7d2b; --fox-paper:#fff8ef;
+  --car:#0f766e; --car-2:#f59e0b;
+  --gpx:#0d1b2a; --gpx-2:#ff6b2c;
+  --cp:#3b2a6b;
+  --display:"Bricolage",ui-sans-serif,system-ui,sans-serif;
+  --text:"Atkinson",ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{overflow-x:hidden}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 18px/1.6 var(--text);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:6px}
+.scena :focus-visible,.caffe :focus-visible{outline-color:#fff}
+.scena .btn:focus{outline:3px solid #fff;outline-offset:3px}
+.lista :focus-visible{outline-color:var(--fox)}
+html{scroll-padding-top:24px;scroll-padding-bottom:24px}
+.vh{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--display);font-weight:800;line-height:.95;margin:0;letter-spacing:-.02em}
+
+/* barra */
+.bar{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.mark{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-size:22px}
+.mark svg{width:34px;height:34px}
+.bar nav ul{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.bar nav li{margin:0}
+.bar nav a{text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px}
+.bar nav a:hover{background:#1c2e7a12}
+.bar nav .kofi{background:var(--ink);color:var(--white)}
+.bar nav .kofi:hover{background:var(--ink-deep)}
+
+/* hero: titolo grande + ventaglio di carte delle app */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center;padding:40px 0 90px}
+.hero h1{font-size:clamp(46px,6.6vw,96px);font-variation-settings:"opsz" 96}
+.hero h1 .riga{display:block}
+.hero h1 .cuore{display:inline-block;width:.78em;height:.78em;vertical-align:-.06em;margin-left:.08em}
+.hero p{font-size:clamp(19px,2vw,22px);max-width:30ch;margin:26px 0 30px;color:#2c3a7d}
+.cta{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--ink-deep);font-weight:700;text-decoration:none;padding:15px 24px;border-radius:16px;box-shadow:0 4px 0 var(--ink)}
+.cta:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--ink)}
+.cta:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
+.patto{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:28px;padding:0;list-style:none;font-weight:700;font-size:16px}
+.patto li::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--gold);margin-right:8px;box-shadow:0 0 0 3px var(--ink) inset}
+
+.fan{position:relative;height:440px}
+.carta{position:absolute;left:50%;top:50%;width:230px;height:320px;margin:-160px 0 0 -115px;border-radius:28px;padding:24px;color:var(--white);text-decoration:none;
+  display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 30px 60px -20px #101a5288;transform-origin:50% 120%;
+  transition:transform .55s cubic-bezier(.2,.8,.2,1.2)}
+.carta img{width:64px;height:64px;border-radius:16px;box-shadow:0 6px 18px #0004}
+.carta .carta-t{font-family:var(--display);font-size:34px;line-height:1;display:block;margin:0;letter-spacing:0}
+.carta span{display:block;font-size:15px;line-height:1.3;margin-top:6px}
+.carta.fox{background:var(--fox);transform:rotate(-11deg) translateX(-135px) translateY(12px)}
+.carta.car{background:var(--car);transform:rotate(11deg) translateX(135px) translateY(12px)}
+.carta.gpx{background:var(--gpx);transform:rotate(0deg) translateY(-14px);z-index:2}
+.fan:hover .carta.fox,.fan:focus-within .carta.fox{transform:rotate(-15deg) translateX(-175px) translateY(0)}
+.fan:hover .carta.car,.fan:focus-within .carta.car{transform:rotate(15deg) translateX(175px) translateY(0)}
+.carta:hover{z-index:3}
+@keyframes arriva{from{transform:rotate(0) translateY(60px);opacity:0}}
+.fan .carta{animation:arriva .8s cubic-bezier(.2,.8,.2,1) backwards}
+.fan .gpx{animation-delay:.1s}.fan .car{animation-delay:.2s}
+
+/* scene delle app: bande piene nel colore dell'app */
+.scena{padding:96px 0;color:var(--white)}
+.scena .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.scena .wrap>div:not(.gioco){min-width:0;container-type:inline-size;text-align:left}
+/* il nome dell'app sta su una riga: la misura segue la colonna, mai una lettera da sola a capo */
+.scena h2{font-size:clamp(36px,6vw,88px);font-size:clamp(36px,14.5cqi,88px);hyphens:manual;overflow-wrap:normal}
+.scena .dom{display:inline-block;margin:14px 0 22px;font-weight:700;text-decoration:none;border-bottom:2px solid currentColor}
+.scena p{font-size:20px;max-width:34ch;margin:0 0 18px}
+.scena ul{margin:0 0 28px;padding:0;list-style:none}
+.scena li{margin:4px 0;position:relative;padding-left:1.1em}
+.scena ul:not(.bottoni):not(.cp-dati) li::before{content:"";position:absolute;left:0;top:.62em;width:.38em;height:.38em;border-radius:50%;background:currentColor}
+.scena .bottoni li,.scena .cp-dati li{padding-left:0}
+.bottoni{display:flex;gap:12px;flex-wrap:wrap;list-style:none;margin:0;padding:0}
+.scena .bottoni li{margin:0}
+.btn{display:inline-block;font-weight:700;text-decoration:none;padding:13px 22px;border-radius:14px}
+.btn.pieno{background:var(--white);color:var(--ink-deep)}
+.btn.vuoto{border:2px solid #ffffffb3}
+.btn:hover{filter:brightness(1.06)}
+.fox-s{background:var(--fox)} .fox-s .btn.pieno{color:var(--fox)}
+.car-s{background:var(--car)} .car-s .btn.pieno{color:var(--car)}
+.gpx-s{background:var(--gpx)} .gpx-s .btn.pieno{color:var(--gpx)}
+.cp-s{background:var(--cp)} .cp-s .btn.pieno{color:var(--cp)}
+.cp-dati{list-style:none;margin:0;padding:0!important;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.scena .cp-dati li{margin:0;padding:18px;background:#ffffff14;border:1px solid #ffffff40;border-radius:18px}
+.cp-dati b{display:block;font:800 clamp(28px,4vw,40px)/1.1 var(--display);color:var(--gold)}
+
+/* giocattolo SpesaFox: lista da spuntare */
+.lista{background:var(--fox-paper);color:#1b2a20;border-radius:24px;padding:26px 26px 18px;box-shadow:0 30px 60px -30px #0008;transform:rotate(1.5deg)}
+.lista h3{font-size:26px;margin-bottom:6px;color:var(--fox)}
+.lista small{display:block;color:#6a6a5a;margin-bottom:12px}
+.voce{display:flex;align-items:center;gap:14px;width:100%;background:none;border:0;border-bottom:1px dashed #1e5b3a33;padding:12px 2px;font:inherit;font-size:19px;color:inherit;text-align:left;cursor:pointer}
+.voce:last-of-type{border-bottom:0}
+.voce i{flex:none;width:26px;height:26px;border-radius:8px;border:3px solid var(--fox);display:grid;place-items:center;font-style:normal;color:#fff;font-weight:700}
+.voce[aria-pressed="true"] i{background:var(--fox)}
+.voce[aria-pressed="true"] i::after{content:"✓"}
+.voce[aria-pressed="true"] span{text-decoration:line-through;opacity:.45}
+.voce em{margin-left:auto;font-style:normal;font-size:14px;color:#7d6e57}
+.totale{display:flex;justify-content:space-between;margin-top:10px;padding-top:12px;border-top:3px solid var(--fox-2);font-weight:700}
+
+/* giocattolo SpeseAuto: quanto costa l'auto in un anno */
+.conto{background:#0b5853;border-radius:24px;padding:28px;box-shadow:inset 0 0 0 2px #ffffff22}
+.conto label{display:block;font-weight:700;margin-bottom:10px}
+.conto input[type=range]{width:100%;accent-color:var(--car-2);height:30px}
+.km{font-family:var(--display);font-size:22px}
+.cifra{font-family:var(--display);font-weight:800;font-size:clamp(64px,9vw,104px);line-height:1;color:var(--car-2);margin:18px 0 4px;font-variant-numeric:tabular-nums}
+.voci{display:grid;grid-template-columns:1fr auto;gap:6px 18px;margin-top:18px;font-size:16px}
+.voci span:nth-child(even){text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.conto small{display:block;margin-top:14px;font-size:14px;color:#d8f0ec}
+
+/* Gippix: il Reel vero in una cornice da telefono */
+.telefono{justify-self:center;width:min(300px,78vw);aspect-ratio:9/16;border-radius:40px;padding:10px;background:#1d2b3c;box-shadow:0 40px 80px -30px #000,0 0 0 2px #ffffff18}
+.telefono video{width:100%;height:100%;object-fit:cover;border-radius:31px;background:#000;display:block}
+
+/* guide utili */
+.guide{padding:90px 0 0}
+.guide h2{font-size:clamp(42px,6vw,76px)}
+.guide>.wrap>p{font-size:20px;margin:18px 0 30px;color:#2c3a7d}
+.guide-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}
+.guide-col>div{background:var(--white);border-radius:22px;padding:22px;box-shadow:0 20px 40px -30px #101a5288}
+.guide h3{font-size:22px;line-height:1.1;margin-bottom:10px}
+.guide ul{margin:0;padding:0;list-style:none}
+.guide li{margin:10px 0;line-height:1.35;font-size:17px}
+.guide li a{text-decoration-color:#1c2e7a55;text-underline-offset:3px}
+.guide li a:hover{text-decoration-color:var(--ink)}
+.guide .tutte{display:inline-block;margin-top:22px;font-weight:700}
+@media (max-width:980px){.guide-col{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.guide-col{grid-template-columns:1fr}}
+
+/* dal nostro Instagram: si riempie da sola con ultimi.php (stesso dominio), senza post resta nascosta */
+.ig{padding:90px 0 0}
+.ig[hidden]{display:none}
+.ig-testa{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px 24px;margin-bottom:28px}
+.ig h2{font-size:clamp(42px,6vw,76px)}
+.ig-testa p{font-size:20px;margin:18px 0 0;color:#2c3a7d}
+.ig-griglia{list-style:none;margin:0;padding:0;display:grid;gap:16px;grid-template-columns:repeat(6,minmax(0,1fr))}
+.ig-griglia a{display:flex;flex-direction:column;height:100%;background:var(--white);border-radius:22px;overflow:hidden;text-decoration:none;box-shadow:0 20px 40px -30px #101a5288;transition:transform .2s}
+.ig-griglia a:hover{transform:translateY(-4px) rotate(-.6deg)}
+.ig-griglia img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;background:#e6e2ff}
+.ig-griglia b{display:block;margin:12px 14px 0;font:800 13px/1 var(--display);letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.ig-griglia span{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;margin:6px 14px 14px;font-size:15px;line-height:1.4;color:#2c3a7d}
+@media (max-width:980px){.ig-griglia{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:560px){.ig-griglia{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.ig-griglia span{font-size:14px}}
+
+/* chi siamo + caffè */
+.noi{padding:110px 0 80px}
+.noi .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:start}
+.noi h2{font-size:clamp(42px,6vw,76px)}
+.noi p{font-size:20px;max-width:36ch;margin:22px 0 0}
+.promesse{margin:0;padding:0;list-style:none;display:grid;gap:22px}
+.promesse li{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start}
+.promesse svg{width:44px;height:44px}
+.promesse b{font-family:var(--display);font-size:24px;display:block;line-height:1.1;margin-bottom:2px}
+.caffe{margin:0 22px 70px;border-radius:36px;background:var(--ink);color:var(--white);padding:70px 22px;text-align:center;position:relative;overflow:hidden}
+.caffe h2{font-size:clamp(40px,6vw,72px);max-width:16ch;margin:0 auto}
+.caffe p{font-size:20px;max-width:40ch;margin:20px auto 30px;color:#d6dcff}
+.caffe .tazza{position:absolute;right:-30px;bottom:-40px;width:240px;opacity:.12}
+footer{padding:0 0 50px;text-align:center;font-size:15px;color:#4a568f}
+footer nav ul{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin:0 0 10px;padding:0;list-style:none}
+footer nav li{margin:0}
+
+@media (max-width:880px){
+  .hero,.scena .wrap,.noi .wrap{grid-template-columns:1fr}
+  .hero{padding-bottom:40px}
+  .fan{height:400px}
+  .scena{padding:70px 0}
+  .scena .gioco{order:2}
+  .bar nav li:not(:last-child){display:none}
+}
+@media (max-width:420px){.carta{width:200px;height:290px;margin:-145px 0 0 -100px}.carta.fox{transform:rotate(-14deg) translateX(-50px)}.carta.car{transform:rotate(14deg) translateX(50px)}}
+/* scorrimento fluido (Lenis): lo fa lo script, non il browser */
+html.lenis,html.lenis body{height:auto}
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <a class="mark" href="#top" aria-label="Kindware Lab, inizio pagina">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86C20 66 8 50 8 33 8 20 18 11 30 11c9 0 16 5 20 12 4-7 11-12 20-12 12 0 22 9 22 22 0 17-12 33-42 53Z" fill="#ffb347"/><path d="M38 36 28 48l10 12M62 36l10 12-10 12M54 32l-8 32" fill="none" stroke="#1c2e7a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Kindware Lab
+    </a>
+    <nav aria-label="Sezioni">
+      <ul>
+        <li><a href="#app">Le app</a></li>
+        <li><a href="#guide">Guide</a></li>
+        <li><a href="#noi">Chi siamo</a></li>
+        <li><a class="kofi" href="https://ko-fi.com/KindwareLab" target="_blank" rel="noopener">Offrici un caffè <span class="vh">(si apre in una nuova scheda)</span></a></li>
+      </ul>
+    </nav>
+  </header>
+</div>
+
+<main id="contenuto">
+<div class="wrap">
+  <section class="hero" id="top" aria-label="Presentazione">
+    <div>
+      <h1><span class="riga">Le app</span><span class="riga">che ti</span><span class="riga">mancavano.</span></h1>
+      <p>Spesa, auto, montagna e il tuo Comune: progetti che ti fanno risparmiare tempo e soldi. Gratis, senza pubblicità, dal telefono.</p>
+      <a class="cta" href="#app">Scopri le nostre app</a>
+      <ul class="patto" aria-label="Le nostre regole">
+        <li>Gratis</li><li>Zero pubblicità</li><li>Dati in Italia</li>
+      </ul>
+    </div>
+    <div class="fan" aria-label="Le nostre app">
+      <a class="carta fox" href="#spesafox"><img src="spesafox.svg" alt=""><div><h2 class="carta-t">SpesaFox</h2><span>La spesa che fa risparmiare</span></div></a>
+      <a class="carta car" href="#speseauto"><img src="speseauto.svg" alt=""><div><h2 class="carta-t">SpeseAuto</h2><span>Quanto costa davvero l'auto</span></div></a>
+      <a class="carta gpx" href="#gippix"><img src="gippix.svg" alt=""><div><h2 class="carta-t">Gippix</h2><span>Il tuo giro in volo 3D</span></div></a>
+    </div>
+  </section>
+</div>
+
+<div id="app">
+  <section class="scena fox-s" id="spesafox" aria-labelledby="t-fox">
+    <div class="wrap">
+      <div>
+        <h2 id="t-fox">SpesaFox</h2>
+        <a class="dom" href="https://spesafox.it/">spesafox.it</a>
+        <p>La lista della spesa di tutta la famiglia, sempre aggiornata su ogni telefono.</p>
+        <ul>
+          <li>La detti a voce mentre cucini</li>
+          <li>Fotografi lo scontrino e lei lo legge da sola</li>
+          <li>Ti mostra le offerte dei volantini sui prodotti che compri davvero</li>
+        </ul>
+        <ul class="bottoni">
+          <li><a class="btn pieno" href="https://spesafox.it/">Apri SpesaFox</a></li>
+          <li><a class="btn vuoto" href="https://www.instagram.com/spesafox/" target="_blank" rel="noopener">SpesaFox su Instagram <span class="vh">(si apre in una nuova scheda)</span></a></li>
+        </ul>
+      </div>
+      <div class="gioco">
+        <div class="lista" id="lista">
+          <h3>Spesa di sabato</h3>
+          <small>Prova a spuntare: è così che funziona al supermercato.</small>
+          <button class="voce" type="button" aria-pressed="false" data-p="1.29"><i></i><span>Latte</span><em>aggiunto da Giulia</em></button>
+          <button class="voce" type="button" aria-pressed="false" data-p="2.35"><i></i><span>Mele golden</span><em>a voce</em></button>
+          <button class="voce" type="button" aria-pressed="false" data-p="1.49"><i></i><span>Pasta di semola</span><em>in offerta</em></button>
+          <button class="voce" type="button" aria-pressed="false" data-p="3.99"><i></i><span>Caffè macinato</span><em>sta per finire</em></button>
+          <div class="totale"><span>Nel carrello</span><span id="tot">0,00 €</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena car-s" id="speseauto" aria-labelledby="t-car">
+    <div class="wrap">
+      <div class="gioco">
+        <div class="conto">
+          <label for="km">Quanti chilometri fai in un anno? <span class="km" id="kmv">12.000</span></label>
+          <input type="range" id="km" min="3000" max="40000" step="1000" value="12000">
+          <div class="cifra" id="anno">2.520 €</div>
+          <div>all'anno, cioè <b id="mese">210 €</b> al mese</div>
+          <div class="voci" id="voci"></div>
+          <small>Esempio con un'utilitaria a benzina: con SpeseAuto lo calcoli con i tuoi numeri veri.</small>
+        </div>
+      </div>
+      <div>
+        <h2 id="t-car">SpeseAuto</h2>
+        <a class="dom" href="https://speseauto.it/">speseauto.it</a>
+        <p>Rifornimenti, tagliandi, bollo e assicurazione in un posto solo, con il costo vero di ogni chilometro.</p>
+        <ul>
+          <li>Consumi reali, pieno dopo pieno</li>
+          <li>Promemoria per bollo, assicurazione e revisione</li>
+          <li>Più auto, condivise con la famiglia</li>
+        </ul>
+        <ul class="bottoni">
+          <li><a class="btn pieno" href="https://speseauto.it/">Apri SpeseAuto</a></li>
+          <li><a class="btn vuoto" href="https://www.instagram.com/speseauto/" target="_blank" rel="noopener">SpeseAuto su Instagram <span class="vh">(si apre in una nuova scheda)</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="scena gpx-s" id="gippix" aria-labelledby="t-gpx">
+    <div class="wrap">
+      <div>
+        <h2 id="t-gpx">Gippix</h2>
+        <a class="dom" href="https://gippix.it/">gippix.it</a>
+        <p>Carichi il GPX della tua escursione o del tuo giro in bici e ottieni un video in volo 3D sulle montagne vere.</p>
+        <ul>
+          <li>Rilievo e immagini satellitari reali</li>
+          <li>Le tue foto nel punto in cui le hai scattate</li>
+          <li>Verticale, pronto per storie e reel</li>
+        </ul>
+        <ul class="bottoni">
+          <li><a class="btn pieno" href="https://gippix.it/">Apri Gippix</a></li>
+          <li><a class="btn vuoto" href="https://www.instagram.com/gippix.it/" target="_blank" rel="noopener">Gippix su Instagram <span class="vh">(si apre in una nuova scheda)</span></a></li>
+        </ul>
+      </div>
+      <div class="gioco">
+        <div class="telefono">
+          <video controls playsinline preload="none" poster="gippix-poster.jpg" aria-label="Video creato con Gippix: il giro delle Tre Cime di Lavaredo">
+            <source src="https://www.gianlucadario.com/apps/social/video/gippix-reel-tre-cime.mp4" type="video/mp4">
+            <track kind="captions" srclang="it" label="Italiano" src="sottotitoli-musica.vtt" default>
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="scena cp-s" id="comunipedia" aria-labelledby="t-cp">
+    <div class="wrap">
+      <div class="gioco">
+        <ul class="cp-dati" aria-label="Comunipedia in numeri">
+          <li><b>7.896</b>Comuni italiani, uno per pagina</li>
+          <li><b>20</b>regioni e 107 province</li>
+          <li><b>Gratis</b>solo dati pubblici e aperti</li>
+          <li><b>Ogni giorno</b>dati che si aggiornano da soli</li>
+        </ul>
+      </div>
+      <div>
+        <h2 id="t-cp">Comunipedia</h2>
+        <a class="dom" href="https://comunipedia.it/">comunipedia.it</a>
+        <p>L'atlante dei Comuni italiani: com'è davvero vivere nel tuo Comune, con i numeri ufficiali.</p>
+        <ul>
+          <li>Abitanti, età, redditi, sindaco e zona sismica</li>
+          <li>Scuole, farmacie, ospedali, meteo e carburanti</li>
+          <li>Classifiche e confronti tra Comuni</li>
+        </ul>
+        <ul class="bottoni">
+          <li><a class="btn pieno" href="https://comunipedia.it/">Apri Comunipedia</a></li>
+          <li><a class="btn vuoto" href="https://comunipedia.it/classifiche">Le classifiche dei Comuni</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
+
+<section class="guide" id="guide" aria-labelledby="t-guide">
+  <div class="wrap">
+    <h2 id="t-guide">Guide utili</h2>
+    <p>Consigli pratici, gratis, per spendere meno e organizzarsi meglio.</p>
+    <div class="guide-col">
+      <div>
+        <h3>Casa e famiglia</h3>
+        <ul>
+          <li><a href="guide/organizzare-spesa-e-costi-di-famiglia/">Come organizzare spesa e costi di famiglia</a></li>
+          <li><a href="guide/app-gratuite-senza-pubblicita/">App gratuite senza pubblicità: come riconoscerle</a></li>
+          <li><a href="guide/aggiungere-app-alla-schermata-home/">Aggiungere un'app web alla schermata Home</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Spesa · SpesaFox</h3>
+        <ul>
+          <li><a href="https://spesafox.it/guide/come-risparmiare-sulla-spesa/">Come risparmiare sulla spesa</a></li>
+          <li><a href="https://spesafox.it/guide/lista-della-spesa-condivisa/">Lista della spesa condivisa in famiglia</a></li>
+          <li><a href="https://spesafox.it/guide/sprecare-meno-cibo/">Come sprecare meno cibo</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Auto · SpeseAuto</h3>
+        <ul>
+          <li><a href="https://speseauto.it/guide/quanto-costa-mantenere-un-auto/">Quanto costa mantenere un'auto all'anno</a></li>
+          <li><a href="https://speseauto.it/guide/calcolare-consumo-reale/">Come calcolare il consumo reale</a></li>
+          <li><a href="https://speseauto.it/guide/scadenze-auto/">Le scadenze dell'auto da ricordare</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Montagna · Gippix</h3>
+        <ul>
+          <li><a href="https://gippix.it/guide/video-3d-percorso-gpx/">Video 3D del percorso dal file GPX</a></li>
+          <li><a href="https://gippix.it/guide/tre-cime-di-lavaredo/">Il giro delle Tre Cime di Lavaredo</a></li>
+          <li><a href="https://gippix.it/guide/stelvio-da-prato/">Lo Stelvio da Prato in bici</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Comuni · Comunipedia</h3>
+        <ul>
+          <li><a href="https://comunipedia.it/regioni">I Comuni regione per regione</a></li>
+          <li><a href="https://comunipedia.it/classifiche">Le classifiche dei Comuni italiani</a></li>
+          <li><a href="https://comunipedia.it/confronta">Confronta due Comuni</a></li>
+        </ul>
+      </div>
+    </div>
+    <a class="tutte" href="guide/">Tutte le guide →</a>
+  </div>
+</section>
+
+<section class="ig" id="instagram" aria-labelledby="t-ig" hidden>
+  <div class="wrap">
+    <div class="ig-testa">
+      <div>
+        <h2 id="t-ig">Dal nostro Instagram</h2>
+        <p>Gli ultimi post di SpesaFox, SpeseAuto, Gippix e Kindware Lab.</p>
+      </div>
+      <a class="cta" href="https://www.instagram.com/kindwarelab/" target="_blank" rel="noopener">Seguici su Instagram <span class="vh">(si apre in una nuova scheda)</span></a>
+    </div>
+    <ul class="ig-griglia"></ul>
+  </div>
+</section>
+
+<section class="noi" id="noi" aria-labelledby="t-noi">
+  <div class="wrap">
+    <div>
+      <h2 id="t-noi">Un laboratorio piccolo, con tre promesse</h2>
+      <p>Kindware Lab è un progetto indipendente: progettiamo, costruiamo e teniamo in vita queste app nel tempo libero, perché ci piace fare cose utili per gli altri.</p>
+    </div>
+    <ul class="promesse">
+      <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#ffb347"/><path d="M14 23l6 6 11-13" fill="none" stroke="#1c2e7a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><span><b>Gratis davvero</b>Nessun abbonamento, nessuna versione premium nascosta.</span></li>
+      <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#ffb347"/><path d="M13 13l18 18M31 13 13 31" stroke="#1c2e7a" stroke-width="4" stroke-linecap="round"/></svg><span><b>Zero pubblicità</b>Né banner né dati venduti a qualcuno.</span></li>
+      <li><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#ffb347"/><rect x="14" y="20" width="16" height="12" rx="3" fill="#1c2e7a"/><path d="M17 20v-4a5 5 0 0 1 10 0v4" fill="none" stroke="#1c2e7a" stroke-width="3.5"/></svg><span><b>I tuoi dati restano tuoi</b>Server in Italia, e cancelli tutto quando vuoi.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="caffe" aria-labelledby="t-caffe">
+  <svg class="tazza" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 86C20 66 8 50 8 33 8 20 18 11 30 11c9 0 16 5 20 12 4-7 11-12 20-12 12 0 22 9 22 22 0 17-12 33-42 53Z" fill="#ffb347"/></svg>
+  <h2 id="t-caffe">Ti semplificano la vita? Offrici un caffè</h2>
+  <p>Con un caffè paghiamo server e domini, e costruiamo la prossima app gratuita.</p>
+  <a class="cta" href="https://ko-fi.com/KindwareLab" target="_blank" rel="noopener">Offri un caffè su Ko-fi <span class="vh">(si apre in una nuova scheda)</span></a>
+</section>
+</main>
+
+<footer>
+  <nav aria-label="Link">
+    <ul>
+      <li><a href="https://spesafox.it/">SpesaFox</a></li>
+      <li><a href="https://speseauto.it/">SpeseAuto</a></li>
+      <li><a href="https://gippix.it/">Gippix</a></li>
+      <li><a href="https://comunipedia.it/">Comunipedia</a></li>
+      <li><a href="https://www.gianlucadario.com/apps/english-sprint/">English Sprint</a></li>
+      <li><a href="guide/">Tutte le guide</a></li>
+      <li><a href="https://www.instagram.com/kindwarelab/" target="_blank" rel="noopener">Instagram <span class="vh">(si apre in una nuova scheda)</span></a></li>
+      <li><a href="https://ko-fi.com/KindwareLab" target="_blank" rel="noopener">Ko-fi <span class="vh">(si apre in una nuova scheda)</span></a></li>
+      <li><a href="mappa-del-sito/">Mappa del sito</a></li>
+    </ul>
+  </nav>
+  Kindware Lab. Questa pagina non usa cookie: conta solo le visite, in forma anonima (Cloudflare Web Analytics).
+</footer>
+
+<script>
+// SpesaFox: spunta le voci e aggiorna il totale del carrello
+(function () {
+  var voci = document.querySelectorAll('#lista .voce'), tot = document.getElementById('tot')
+  var euro = function (n) { return n.toFixed(2).replace('.', ',') + ' €' }
+  voci.forEach(function (v) {
+    v.addEventListener('click', function () {
+      v.setAttribute('aria-pressed', v.getAttribute('aria-pressed') === 'true' ? 'false' : 'true')
+      var s = 0
+      voci.forEach(function (x) { if (x.getAttribute('aria-pressed') === 'true') s += parseFloat(x.dataset.p) })
+      tot.textContent = euro(s)
+    })
+  })
+})()
+// SpeseAuto: costo di un'auto in un anno a seconda dei km (valori d'esempio di un'utilitaria a benzina)
+;(function () {
+  var r = document.getElementById('km'), kmv = document.getElementById('kmv'), anno = document.getElementById('anno'),
+      mese = document.getElementById('mese'), voci = document.getElementById('voci')
+  var fmt = function (n) { return Math.round(n).toLocaleString('it-IT') }
+  function calcola() {
+    var km = +r.value
+    var parti = [
+      ['Carburante', km / 16 * 1.80],      // 16 km/l a 1,80 €/l
+      ['Assicurazione', 480],
+      ['Manutenzione e gomme', 180 + km * 0.025],
+      ['Bollo', 190]
+    ]
+    var s = parti.reduce(function (a, p) { return a + p[1] }, 0)
+    kmv.textContent = fmt(km)
+    anno.textContent = fmt(s) + ' €'
+    mese.textContent = fmt(s / 12) + ' €'
+    voci.innerHTML = parti.map(function (p) { return '<span>' + p[0] + '</span><span>' + fmt(p[1]) + ' €</span>' }).join('') +
+      '<span>Al chilometro</span><span>' + (s / km).toFixed(2).replace('.', ',') + ' €</span>'
+  }
+  r.addEventListener('input', calcola)
+  calcola()
+})()
+// Dal nostro Instagram: gli ultimi post già pubblicati (ultimi.php legge la coda del cron), niente embed di Instagram
+;(function () {
+  var s = document.getElementById('instagram')
+  if (!s || !window.fetch) return
+  function go() {
+    fetch('ultimi.php?n=6').then(function (r) { return r.ok ? r.json() : null }).then(function (j) {
+      if (!j || !j.post || !j.post.length) return
+      var ul = s.querySelector('ul')
+      j.post.forEach(function (p) {
+        var li = document.createElement('li'), a = document.createElement('a'), im = document.createElement('img'), b = document.createElement('b'), t = document.createElement('span')
+        a.href = p.link; a.target = '_blank'; a.rel = 'noopener'
+        im.src = p.img; im.alt = ''; im.loading = 'lazy'; im.decoding = 'async'; im.width = 540; im.height = 675
+        b.textContent = p.nome; t.textContent = p.testo
+        var v = document.createElement('span'); v.className = 'vh'; v.textContent = '(si apre in una nuova scheda)'
+        a.appendChild(im); a.appendChild(b); a.appendChild(t); a.appendChild(document.createTextNode(' ')); a.appendChild(v); li.appendChild(a); ul.appendChild(li)
+      })
+      s.hidden = false
+      window.dispatchEvent(new Event("kw:altezze"))
+    }).catch(function () {})
+  }
+  if ('IntersectionObserver' in window) {
+    var o = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { o.disconnect(); go() } }, { rootMargin: '600px' })
+    o.observe(document.getElementById('guide'))
+  } else go()
+})()
+</script>
+<script defer src="js/gsap.min.js?v=3.15.1"></script>
+<script defer src="js/ScrollTrigger.min.js?v=3.15.1"></script>
+<script defer src="js/SplitText.min.js?v=3.15.1"></script>
+<script defer src="js/lenis.min.js?v=1.3.27"></script>
+<script defer src="js/animazioni.js?v=3"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "e17a0c2603aa4a0ba29f7228b21157d7"}'></script>
+</body>
+</html>

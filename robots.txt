@@ -1,0 +1,5 @@
+# Motori di ricerca e assistenti AI sono i benvenuti
+User-agent: *
+Allow: /
+
+Sitemap: https://kindwarelab.it/sitemap.xml
