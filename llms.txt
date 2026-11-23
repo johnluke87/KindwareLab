@@ -7,6 +7,7 @@
 - [SpesaFox](https://spesafox.it/): la lista della spesa condivisa che fa risparmiare, con scontrini e volantini
 - [SpeseAuto](https://speseauto.it/): rifornimenti, consumi, scadenze e costo al km dell'auto
 - [Gippix](https://gippix.it/): dal file GPX al video in volo 3D del tuo giro
+- [Gippix per Android](https://gippix.it/app/): app gratuita (APK) che registra escursioni e giri col GPS del telefono e li salva su Gippix
 - [English Sprint](https://www.gianlucadario.com/apps/english-sprint/): corso di inglese per il lavoro gratuito e senza registrazione, 60 lezioni con ripasso e tutor AI
 - [Comunipedia](https://comunipedia.it/): l'atlante gratuito dei 7.896 Comuni italiani, con abitanti, redditi, servizi, classifiche e confronti da dati pubblici
 - [Ko-fi](https://ko-fi.com/KindwareLab): offrici un caffè
